@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noutbuklar Katalogi — Programis Laptops</title>
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --accent: #06b6d4;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* --- HEADER & NAVIGATION --- */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .navbar {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+        }
+
+        .logo span {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #fff;
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .cart-btn {
+            position: relative;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 0.6rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cart-btn:hover {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.1);
+        }
+
+        .cart-badge {
+            background: var(--primary);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* --- PAGE HEADER --- */
+        .page-header {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 1) 100%);
+            padding: 4rem 2rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- FILTER SECTION --- */
+        .catalog-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .filter-bar {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 260px;
+        }
+
+        .search-box input {
+            width: 100%;
+            background: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1rem 0.75rem 2.8rem;
+            border-radius: 50px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .brand-filters {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        /* --- PRODUCTS GRID --- */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-card:hover {
+            border-color: rgba(79, 70, 229, 0.6);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+        }
+
+        .product-badge {
+            align-self: flex-start;
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--accent);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-specs {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-bottom: 1.5rem;
+            list-style: none;
+        }
+
+        .product-specs li {
+            margin-bottom: 0.38rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .product-price {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .add-cart-btn {
+            background: var(--primary);
+            color: #fff;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .add-cart-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 1rem;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            display: none;
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            background: #090d16;
+            border-top: 1px solid var(--border-color);
+            padding: 4rem 2rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-about p {
+            color: var(--text-muted);
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            max-width: 320px;
+        }
+
+        .footer-col h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-col ul a {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .footer-col ul a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.88rem;
+        }
+
+        /* --- TOAST NOTIFICATION --- */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--card-bg);
+            border: 1px solid var(--primary);
+            color: #fff;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 2000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 73px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 73px);
+                background: var(--dark-bg);
+                flex-direction: column;
+                padding: 3rem;
+                transition: var(--transition);
+            }
+            .nav-links.active {
+                left: 0;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="index.html" class="logo">
+                <i class="fa-solid fa-laptop-code" style="color: var(--primary);"></i>
+                PROGRAMIS <span>LAPTOPS</span>
+            </a>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Bosh sahifa</a></li>
+                <li><a href="products.html" class="active">Noutbuklar</a></li>
+                <li><a href="about.html">Biz haqimizda</a></li>
+            </ul>
+
+            <div class="header-actions">
+                <button class="cart-btn" id="cartBtn">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>Savat</span>
+                    <div class="cart-badge" id="cartCount">0</div>
+                </button>
+                <button class="mobile-menu-btn" id="menuBtn">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- PAGE HEADER -->
+    <section class="page-header">
+        <h1 class="page-title">Noutbuklar Katalogi</h1>
+        <p class="page-subtitle">Apple MacBook, HP va Acer brendlarining eng mashhur modellari bilan tanishing.</p>
+    </section>
+
+    <!-- CATALOG CONTAINER -->
+    <div class="catalog-container">
+        
+        <!-- FILTER BAR -->
+        <div class="filter-bar">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Noutbuk nomini yoki xususiyatini qidiring...">
+            </div>
+
+            <div class="brand-filters">
+                <button class="filter-btn active" data-brand="all">Barchasi</button>
+                <button class="filter-btn" data-brand="apple">Apple MacBook</button>
+                <button class="filter-btn" data-brand="hp">HP</button>
+                <button class="filter-btn" data-brand="acer">Acer</button>
+            </div>
+        </div>
+
+        <!-- PRODUCTS GRID -->
+        <div class="products-grid" id="productsGrid">
+
+            <!-- APPLE MACBOOK 1 -->
+            <div class="product-card" data-brand="apple">
+                <div>
+                    <span class="product-badge">Apple Pro</span>
+                    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="MacBook Pro 16" class="product-img">
+                    <h3 class="product-title">Apple MacBook Pro 16" M3 Max</h3>
+                    <ul class="product-specs">
+                        <li><i class="fa-solid fa-cpu"></i> Apple M3 Max (16-core CPU)</li>
+                        <li><i class="fa-solid fa-memory"></i> 36GB Unified Memory</li>
+                        <li><i class="fa-solid fa-hard-drive"></i> 1TB NVMe SSD</li>
+                    </ul>
+                </div>
+                <div class="product-footer">
+                    <span class="product-price">$3,499</span>
+                    <button class="add-cart-btn" onclick="addToCart('MacBook Pro 16 M3 Max')">
+                        <i class="fa-solid fa-plus"></i> Savatga
+                    </button>
+                </div>
+            </div>
+
+            <!-- APPLE MACBOOK 2 -->
+            <div class="product-card" data-brand="apple">
+                <div>
+                    <span class="product-badge">Apple Air</span>
+                    <img src="https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&w=600&q=80" alt="MacBook Air 15" class="product-img">
+                    <h3 class="product-title">Apple MacBook Air 15" M2</h3>
+                    <ul class="product-specs">
+                        <li><i class="fa-solid fa-cpu"></i> Apple M2 Chip (8-core)</li>
+                        <li><i class="fa-solid fa-memory"></i> 16GB RAM</li>
+                        <li><i class="fa-solid fa-hard-drive"></i> 512GB SSD</li>
+                    </ul>
+                </div>
+                <div class="product-footer">
+                    <span class="product-price">$1,399</span>
+                    <button class="add-cart-btn" onclick="addToCart('MacBook Air 15 M2')">
+                        <i class="fa-solid fa-plus"></i> Savatga
+                    </button>
+                </div>
+            </div>
+
+            <!-- APPLE MACBOOK 3 -->
+            <div class="product-card" data-brand="apple">
+                <div>
+                    <span class="product-badge">Apple Pro</span>
+                    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80" alt="MacBook Pro 14" class="product-img">
+                    <h3 class="product-title">Apple MacBook Pro 14" M3</h3>
+                    <ul class="product-specs">
+                        <li><i class="fa-solid fa-cpu"></i> Apple M3 Chip</li>
+                        <li><i class="fa-solid fa-memory"></i> 16GB RAM</li>
+                        <li><i class="fa-solid fa-hard-drive"></i> 512GB SSD</li>
+                    </ul>
+                </div>
+                <div class="product-footer">
+                    <span class="product-price">$1,799</span>
+                    <button class="add-cart-btn" onclick="addToCart('MacBook Pro 14 M3')">
+                        <i class="fa-solid fa-plus"></i> Savatga
+                    </button>
+                </div>
+            </div>
+
+            <!-- HP 1 -->
+            <div class="product-card" data-brand="hp">
+                <div>
+                    <span class="product-badge">HP Premium</span>
+                    <img src="https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=600&q=80" alt="HP Spectre x360" class="product-img">
+                    <h3 class="product-title">HP Spectre x360 14"</h3>
+                    <ul class="product-specs">
+                        <li><i class="fa-solid fa-cpu"></i> Intel Core Ultra 7</li>
+                        <li><i class="fa-solid fa-memory"></i> 16GB LPDDR5x</li>
+                        <li><i class="fa-solid fa-hard-drive"></i> 1TB SSD</li>
+                    </ul>
+                </div>
+                <div class="product-footer">
+                    <span class="product-price">$1,450</span>
+                    <button class="add-cart-btn" onclick="addToCart('HP Spectre x360 14')">
+                        <i class="fa-solid fa-plus"></i> Savatga
+                    </button>
+                </div>
+            </div>
+
+            <!-- HP 2 -->
+            <div class="product-card" data-brand="hp">
+                <div>
+                    <span class="product-badge">HP Gaming</span>
+                    <img src="https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=600&q=80" alt="HP Omen" class="product-img">
+                    <h3 class="product-title">HP OMEN 16 Gaming</h3>
+                    <ul class="product-specs">
+                        <li><i class="fa-solid fa-cpu"></i> Intel Core i7-13700HX</li>
+                        <li><i class="fa-solid fa-memory"></i> 16GB DDR5 RAM</li>
+                        <li><i class="fa-solid fa-microchip"></i> RTX 4070 8GB</li>
+                    </ul>
+                </div>
+                <div class="product-footer">
+                    <span class="product-price">$1,699</span>
+                    <button class="add-cart-btn" onclick="addToCart('HP OMEN 16 Gaming')">
+                        <i class="fa-solid fa-plus"></i> Savatga
+                    </button>
+                </div>
+            </div>
+
+            <!-- HP 3 -->
+            <div class="product-card" data-brand="hp">
+                <div>
+                    <span class="product-badge">HP Office</span>
+                    <img src="https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=600&q=80" alt="HP Pavilion" class="product-img">
+                    <h3 class="product-title">HP Pavilion Plus 14</h3>
+                    <ul class="product-specs">
+                        <li><i class="fa-solid fa-cpu"></i> AMD Ryzen 7 7840U</li>
+                        <li><i class="fa-solid fa-memory"></i> 16GB RAM</li>
+                        <li><i class="fa-solid fa-hard-drive"></i> 512GB SSD</li>
+                    </ul>
+                </div>
+                <div class="product-footer">
+                    <span class="product-price">$899</span>
+                    <button class="add-cart-btn" onclick="addToCart('HP Pavilion Plus 14')">
+                        <i class="fa-solid fa-plus"></i> Savatga
+                    </button>
+                </div>
+            </div>
+
+            <!-- ACER 1 -->
+            <div class="product-card" data-brand="acer">
+                <div>
+                    <span class="product-badge">Acer Gaming</span>
+                    <img src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=600&q=80" alt="Acer Predator" class="product-img">
+                    <h3 class="product-title">Acer Predator Helios 16</h3>
+                    <ul class="product-specs">
+                        <li><i class="fa-solid fa-cpu"></i> Intel i9-13900HX</li>
+                        <li><i class="fa-solid fa-memory"></i> 32GB DDR5</li>
+                        <li><i class="fa-solid fa-microchip"></i> RTX 4080 12GB</li>
+                    </ul>
+                </div>
+                <div class="product-footer">
+                    <span class="product-price">$2,199</span>
+                    <button class="add-cart-btn" onclick="addToCart('Acer Predator Helios 16')">
+                        <i class="fa-solid fa-plus"></i> Savatga
+                    </button>
+                </div>
+            </div>
+
+            <!-- ACER 2 -->
+            <div class="product-card" data-brand="acer">
+                <div>
+                    <span class="product-badge">Acer Ultra</span>
+                    <img src="https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?auto=format&fit=crop&w=600&q=80" alt="Acer Swift" class="product-img">
+                    <h3 class="product-title">Acer Swift Go 14 OLED</h3>
+                    <ul class="product-specs">
+                        <li><i class="fa-solid fa-cpu"></i> Intel Core Ultra 5</li>
+                        <li><i class="fa-solid fa-memory"></i> 16GB RAM</li>
+                        <li><i class="fa-solid fa-hard-drive"></i> 512GB SSD</li>
+                    </ul>
+                </div>
+                <div class="product-footer">
+                    <span class="product-price">$849</span>
+                    <button class="add-cart-btn" onclick="addToCart('Acer Swift Go 14')">
+                        <i class="fa-solid fa-plus"></i> Savatga
+                    </button>
+                </div>
+            </div>
+
+            <!-- ACER 3 -->
+            <div class="product-card" data-brand="acer">
+                <div>
+                    <span class="product-badge">Acer Gaming</span>
+                    <img src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=600&q=80" alt="Acer Nitro" class="product-img">
+                    <h3 class="product-title">Acer Nitro 16 Gaming</h3>
+                    <ul class="product-specs">
+                        <li><i class="fa-solid fa-cpu"></i> AMD Ryzen 7 7735HS</li>
+                        <li><i class="fa-solid fa-memory"></i> 16GB DDR5</li>
+                        <li><i class="fa-solid fa-microchip"></i> RTX 4060 8GB</li>
+                    </ul>
+                </div>
+                <div class="product-footer">
+                    <span class="product-price">$1,150</span>
+                    <button class="add-cart-btn" onclick="addToCart('Acer Nitro 16 Gaming')">
+                        <i class="fa-solid fa-plus"></i> Savatga
+                    </button>
+                </div>
+            </div>
+
+            <div class="no-results" id="noResults">
+                <i class="fa-solid fa-laptop-code" style="font-size: 3rem; margin-bottom: 1rem; color: var(--border-color);"></i>
+                <p>Kechirasiz, mos noutbuk topilmadi.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-about">
+                <a href="index.html" class="logo">
+                    <i class="fa-solid fa-laptop-code" style="color: var(--primary);"></i>
+                    PROGRAMIS <span>LAPTOPS</span>
+                </a>
+                <p>IT mutaxassislari, dasturchilar va dizaynerlar uchun eng so'nggi noutbuk texnologiyalari markazi.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Sahifalar</h4>
+                <ul>
+                    <li><a href="index.html">Bosh sahifa</a></li>
+                    <li><a href="products.html">Noutbuklar Katalogi</a></li>
+                    <li><a href="about.html">Biz haqimizda</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Brendlar</h4>
+                <ul>
+                    <li><a href="products.html">Apple MacBook</a></li>
+                    <li><a href="products.html">HP Laptops</a></li>
+                    <li><a href="products.html">Acer Laptops</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Aloqa</h4>
+                <ul>
+                    <li><i class="fa-solid fa-phone"></i> +998 (90) 123-45-67</li>
+                    <li><i class="fa-solid fa-envelope"></i> info@programis.uz</li>
+                    <li><i class="fa-solid fa-location-dot"></i> Toshkent sh., Chilonzor r.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Programis Laptops. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast" id="toast">
+        <i class="fa-solid fa-circle-check" style="color: #10b981; font-size: 1.3rem;"></i>
+        <span id="toastMsg">Mahsulot savatga qo'shildi!</span>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Mobile Navigation Toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = menuBtn.querySelector('i');
+            if(navLinks.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Brand Filtering and Live Search System
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const productCards = document.querySelectorAll('.product-card');
+        const searchInput = document.getElementById('searchInput');
+        const noResults = document.getElementById('noResults');
+
+        let currentBrand = 'all';
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentBrand = btn.getAttribute('data-brand');
+                applyFilters();
+            });
+        });
+
+        searchInput.addEventListener('input', applyFilters);
+
+        function applyFilters() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            let visibleCount = 0;
+
+            productCards.forEach(card => {
+                const cardBrand = card.getAttribute('data-brand');
+                const cardText = card.innerText.toLowerCase();
+
+                const matchesBrand = (currentBrand === 'all' || cardBrand === currentBrand);
+                const matchesSearch = cardText.includes(searchTerm);
+
+                if (matchesBrand && matchesSearch) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (visibleCount === 0) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+        }
+
+        // Cart Interaction Logic
+        let cartCount = 0;
+        const cartBadge = document.getElementById('cartCount');
+        const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toastMsg');
+
+        function addToCart(productName) {
+            cartCount++;
+            cartBadge.innerText = cartCount;
+            
+            toastMsg.innerText = `${productName} savatga qo'shildi!`;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        document.getElementById('cartBtn').addEventListener('click', () => {
+            if(cartCount === 0) {
+                alert("Savatingiz bo'sh. Biror bir noutbuk tanlang!");
+            } else {
+                alert(`Savatingizda ${cartCount} ta noutbuk bor.`);
+            }
+        });
+    </script>
+</body>
+</html>
